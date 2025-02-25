@@ -21,7 +21,7 @@ function App() {
   useEffect(() => {
     setLoading(true);
     axios
-      .get('http://192.168.1.10:3000/users')  // Utilise l'IP de ta machine virtuelle
+      .get('http://192.168.1.10:3000/users1')  // Utilise l'IP de ta machine virtuelle
       .then((response) => {
         setUsers(response.data);
         setLoading(false);
@@ -43,12 +43,12 @@ function App() {
     setLoading(true);
     if (editingUserId) {
       axios
-        .put(`http://192.168.1.10:3000/users/${editingUserId}`, newUser) // Utilise l'IP de ta machine virtuelle
+        .put(`http://192.168.1.10:3000/users1/${editingUserId}`, newUser) // Utilise l'IP de ta machine virtuelle
         .then((response) => {
           setSuccessMessage('Utilisateur modifié avec succès!');
           setNewUser({ nom: '', prenom: '', age: '', profession: '', email: '' });
           setEditingUserId(null);
-          return axios.get('http://192.168.1.10:3000/users');  // Utilise l'IP de ta machine virtuelle
+          return axios.get('http://192.168.1.10:3000/users1');  // Utilise l'IP de ta machine virtuelle
         })
         .then((response) => {
           setUsers(response.data);
@@ -62,11 +62,11 @@ function App() {
         });
     } else {
       axios
-        .post('http://192.168.1.10:3000/users', newUser) // Utilise l'IP de ta machine virtuelle
+        .post('http://192.168.1.10:3000/users1', newUser) // Utilise l'IP de ta machine virtuelle
         .then((response) => {
           setSuccessMessage('Utilisateur ajouté avec succès!');
           setNewUser({ nom: '', prenom: '', age: '', profession: '', email: '' });
-          return axios.get('http://192.168.1.10:3000/users');  // Utilise l'IP de ta machine virtuelle
+          return axios.get('http://192.168.1.10:3000/users1');  // Utilise l'IP de ta machine virtuelle
         })
         .then((response) => {
           setUsers(response.data);
@@ -88,7 +88,7 @@ function App() {
 
   const handleDelete = (id) => {
     axios
-      .delete(`http://192.168.1.10:3000/users/${id}`) // Utilise l'IP de ta machine virtuelle
+      .delete(`http://192.168.1.10:3000/users1/${id}`) // Utilise l'IP de ta machine virtuelle
       .then(() => {
         setUsers(users.filter((user) => user.id !== id));
       })
