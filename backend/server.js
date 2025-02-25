@@ -27,10 +27,12 @@ db.exec(`
 
 // Routes API
 app.get('/', (req, res) => res.send('API Running'));
+
 app.get('/users', (req, res) => {
     const users = db.prepare("SELECT * FROM users").all();
     res.json(users);
 });
+
 app.post('/users', (req, res) => {
     const { nom, prenom, age, profession, email } = req.body;
     console.log('Données reçues :', req.body);
@@ -49,11 +51,13 @@ app.post('/users', (req, res) => {
     console.log('Utilisateur ajouté avec succès. ID :', result.lastInsertRowid);
     res.json({ id: result.lastInsertRowid });
 });
+
 app.delete('/users/:id', (req, res) => {
     const stmt = db.prepare("DELETE FROM users WHERE id = ?");
     const result = stmt.run(req.params.id);
     res.json({ changes: result.changes });
 });
+
 app.put('/users/:id', (req, res) => {
     const { nom, prenom, age, profession, email } = req.body;
     const stmt = db.prepare(`UPDATE users SET nom = ?, prenom = ?, age = ?, profession = ?, email = ? WHERE id = ?`);
