@@ -28,21 +28,28 @@ db.exec(`
 // Routes API
 app.get('/', (req, res) => res.send('API Running'));
 
+// Récupérer tous les utilisateurs
 app.get('/users', (req, res) => {
     const users = db.prepare("SELECT * FROM users").all();
     res.json(users);
 });
 
+// Ajouter un utilisateur
 app.post('/users', (req, res) => {
     const { nom, prenom, age, profession, email } = req.body;
     console.log('Données reçues :', req.body);
     
+    // Validation des champs
+    if (!nom || !prenom || !age || !profession || !email) {
+        return res.status(400).json({ error: "Tous les champs sont requis." });
+    }
+
     // Validation de l'email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
         return res.status(400).json({ error: "L'email est invalide." });
     }
-    
+
     const stmt = db.prepare(`
         INSERT INTO users (nom, prenom, age, profession, email)
         VALUES (?, ?, ?, ?, ?)
@@ -52,15 +59,19 @@ app.post('/users', (req, res) => {
     res.json({ id: result.lastInsertRowid });
 });
 
+// Supprimer un utilisateur
 app.delete('/users/:id', (req, res) => {
     const stmt = db.prepare("DELETE FROM users WHERE id = ?");
     const result = stmt.run(req.params.id);
     res.json({ changes: result.changes });
 });
 
+// Mettre à jour un utilisateur
 app.put('/users/:id', (req, res) => {
     const { nom, prenom, age, profession, email } = req.body;
-    const stmt = db.prepare(`UPDATE users SET nom = ?, prenom = ?, age = ?, profession = ?, email = ? WHERE id = ?`);
+    const stmt = db.prepare(`
+        UPDATE users SET nom = ?, prenom = ?, age = ?, profession = ?, email = ? WHERE id = ?
+    `);
     const result = stmt.run(nom, prenom, age, profession, email, req.params.id);
     res.json({ message: "Utilisateur mis à jour" });
 });

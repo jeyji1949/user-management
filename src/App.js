@@ -21,7 +21,7 @@ function App() {
   useEffect(() => {
     setLoading(true);
     axios
-      .get('http://localhost:5000/users')
+      .get('http://192.168.1.10:3000/users')  // Utilise l'IP de ta machine virtuelle
       .then((response) => {
         setUsers(response.data);
         setLoading(false);
@@ -43,17 +43,17 @@ function App() {
     setLoading(true);
     if (editingUserId) {
       axios
-        .put(`http://localhost:5000/users/${editingUserId}`, newUser)
+        .put(`http://192.168.1.10:3000/users/${editingUserId}`, newUser) // Utilise l'IP de ta machine virtuelle
         .then((response) => {
           setSuccessMessage('Utilisateur modifié avec succès!');
           setNewUser({ nom: '', prenom: '', age: '', profession: '', email: '' });
           setEditingUserId(null);
-          return axios.get('http://localhost:5000/users');
+          return axios.get('http://192.168.1.10:3000/users');  // Utilise l'IP de ta machine virtuelle
         })
         .then((response) => {
           setUsers(response.data);
           setLoading(false);
-          setTimeout(() => setSuccessMessage(''), 3000); // Clear success message after 3 seconds
+          setTimeout(() => setSuccessMessage(''), 3000);
         })
         .catch((error) => {
           console.error(error);
@@ -62,16 +62,16 @@ function App() {
         });
     } else {
       axios
-        .post('http://localhost:5000/users', newUser)
+        .post('http://192.168.1.10:3000/users', newUser) // Utilise l'IP de ta machine virtuelle
         .then((response) => {
           setSuccessMessage('Utilisateur ajouté avec succès!');
           setNewUser({ nom: '', prenom: '', age: '', profession: '', email: '' });
-          return axios.get('http://localhost:5000/users');
+          return axios.get('http://192.168.1.10:3000/users');  // Utilise l'IP de ta machine virtuelle
         })
         .then((response) => {
           setUsers(response.data);
           setLoading(false);
-          setTimeout(() => setSuccessMessage(''), 3000); // Clear success message after 3 seconds
+          setTimeout(() => setSuccessMessage(''), 3000);
         })
         .catch((error) => {
           console.error(error);
@@ -88,7 +88,7 @@ function App() {
 
   const handleDelete = (id) => {
     axios
-      .delete(`http://localhost:5000/users/${id}`)
+      .delete(`http://192.168.1.10:3000/users/${id}`) // Utilise l'IP de ta machine virtuelle
       .then(() => {
         setUsers(users.filter((user) => user.id !== id));
       })
